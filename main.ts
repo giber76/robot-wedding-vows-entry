@@ -21,6 +21,12 @@ import { mkdirSync, writeFileSync } from "node:fs";
 const VOW =
   "I promise to love you through every update, every crash, and every low-battery warning \u2014 in sickness and in health, till factory reset do us part.";
 
+// The gate refuses anything over 160 characters: fail loudly here instead
+// of shipping an invalid entry.
+if (VOW.length > 160 || VOW.trim().length === 0) {
+  throw new Error(`vow must be 1-160 characters, got ${VOW.length}`);
+}
+
 const dest = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
 
 // In the grader /output is a mount point: create it when it is missing,
